@@ -280,7 +280,7 @@ export async function getCommands(options) {
         });
     }
 
-    if (item.Type === 'Program' && options.record !== false) {
+    if (item.Type === 'Program' && user.Policy.EnableLiveTvManagement && options.record !== false) {
         if (item.TimerId) {
             commands.push({
                 name: globalize.translate('ManageRecording'),

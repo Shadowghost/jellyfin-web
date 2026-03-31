@@ -72,8 +72,15 @@ function playAllFromHere(card, serverId, queue) {
 }
 
 function showProgramDialog(item) {
-    import('./recordingcreator/recordingcreator').then(({ default:recordingCreator }) => {
-        recordingCreator.show(item.Id, item.ServerId);
+    const apiClient = ServerConnections.getApiClient(item.ServerId);
+    apiClient.getCurrentUser().then(function (user) {
+        if (user.Policy.EnableLiveTvManagement) {
+            import('./recordingcreator/recordingcreator').then(({ default:recordingCreator }) => {
+                recordingCreator.show(item.Id, item.ServerId);
+            });
+        } else {
+            appRouter.showItem(item);
+        }
     });
 }
 
