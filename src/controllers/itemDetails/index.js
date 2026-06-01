@@ -1855,6 +1855,7 @@ export default function (view, params) {
 
         Promise.all([getPromise(apiClient, pageParams), apiClient.getCurrentUser()]).then(([item, user]) => {
             currentItem = item;
+            selectedVersion = null;
             reloadFromItem(instance, page, pageParams, item, user);
         }).catch((error) => {
             console.error('failed to get item or current user: ', error);
@@ -1907,7 +1908,14 @@ export default function (view, params) {
             return;
         }
 
-        playItem(item, item.UserData && mode === ItemAction.Resume ? item.UserData.PlaybackPositionTicks : 0);
+        // Resume from the selected version's saved position
+        const selectedId = view.querySelector('.selectSource').value;
+        const resumeSource = (selectedVersion && selectedVersion.id === selectedId) ? selectedVersion.item : item;
+        const startPositionTicks = resumeSource.UserData && mode === ItemAction.Resume ?
+            resumeSource.UserData.PlaybackPositionTicks :
+            0;
+
+        playItem(item, startPositionTicks);
     }
 
     function onPlayClick() {
@@ -2013,6 +2021,7 @@ export default function (view, params) {
     }
 
     let currentItem;
+    let selectedVersion = null;
     const self = this;
 
     function init() {
@@ -2074,6 +2083,7 @@ export default function (view, params) {
             unmount(self);
 
             currentItem = null;
+            selectedVersion = null;
             self._currentPlaybackMediaSources = null;
             self.currentRecordingFields = null;
         });
@@ -2094,6 +2104,7 @@ export default function (view, params) {
     function refreshSelectedVersion() {
         const selectedId = view.querySelector('.selectSource').value;
         if (!selectedId || !currentItem || selectedId === currentItem.Id) {
+            selectedVersion = null;
             reloadPlayButtons(view, currentItem);
             reloadUserDataButtons(view, currentItem);
             return;
@@ -2117,6 +2128,7 @@ export default function (view, params) {
                 PartCount: altItem.PartCount,
                 MediaStreams: altItem.MediaStreams
             };
+            selectedVersion = { id: selectedId, item: merged };
             reloadPlayButtons(view, merged);
             reloadUserDataButtons(view, merged);
         }).catch(function (err) {
