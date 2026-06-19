@@ -1,6 +1,5 @@
-import type { SessionInfoDto } from '@jellyfin/sdk/lib/generated-client/models/session-info-dto';
 import { useApi } from 'hooks/useApi';
-import { useCallback, useEffect } from 'react';
+import { useEffect, useMemo } from 'react';
 import { QUERY_KEY, useSessions } from '../api/useSessions';
 import { queryClient } from 'utils/query/queryClient';
 import filterSessions from '../utils/filterSessions';
@@ -15,34 +14,18 @@ const useLiveSessions = () => {
 
     const sessionsQuery = useSessions(QUERY_PARAMS);
 
-    const updateSessions = useCallback((sessions: SessionInfoDto[]) => {
-        const newSessions = filterSessions(sessions);
-        const data = queryClient.getQueryData([ QUERY_KEY, QUERY_PARAMS ]) as SessionInfoDto[];
-        if (data) {
-            const currentSessions = [ ...data ];
-
-            for (const session of newSessions) {
-                const sessionIndex = currentSessions.findIndex((value) => value.DeviceId === session.DeviceId);
-                if (sessionIndex == -1) {
-                    currentSessions.push(session);
-                } else {
-                    currentSessions[sessionIndex] = session;
-                }
-            }
-            return currentSessions;
-        } else {
-            return newSessions;
-        }
-    }, []);
-
     useEffect(() => {
-        // Return function for unsubscribing
-        return api?.subscribe([OutboundWebSocketMessageType.Sessions], ({ Data }) => {
-            queryClient.setQueryData([ QUERY_KEY, QUERY_PARAMS ], updateSessions(Data ?? []));
+        // The Sessions feed sends the full session list each interval, so replace the cache
+        // wholesale — this prunes sessions that stopped or ended instead of leaving them stale.
+        return api?.subscribe([ OutboundWebSocketMessageType.Sessions ], ({ Data }) => {
+            queryClient.setQueryData([ QUERY_KEY, QUERY_PARAMS ], Data ?? []);
         });
-    }, [api, updateSessions]);
+    }, [ api ]);
 
-    return sessionsQuery;
+    // Filter consistently regardless of whether the data came from the REST poll or the WebSocket.
+    const data = useMemo(() => filterSessions(sessionsQuery.data ?? []), [ sessionsQuery.data ]);
+
+    return { ...sessionsQuery, data };
 };
 
 export default useLiveSessions;
