@@ -158,7 +158,7 @@ function getEditorHtml() {
     html += '</div>';
 
     html += '<label class="checkboxContainer">';
-    html += '<input is="emby-checkbox" type="checkbox" id="chkEnableInternetMetadata" />';
+    html += '<input is="emby-checkbox" type="checkbox" id="chkEnableInternetMetadata" checked />';
     html += `<span>${globalize.translate('SearchForCollectionInternetMetadata')}</span>`;
     html += '</label>';
 

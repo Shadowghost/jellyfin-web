@@ -39,6 +39,11 @@ function getEditorHtml() {
     html += '<span>' + globalize.translate('ReplaceTrickplayImages') + '</span>';
     html += '</label>';
 
+    html += '<label class="checkboxContainer hide fldReplaceChapterImages">';
+    html += '<input type="checkbox" is="emby-checkbox" class="chkReplaceChapterImages" />';
+    html += '<span>' + globalize.translate('ReplaceChapterImages') + '</span>';
+    html += '</label>';
+
     html += '<div class="fieldDescription">';
     html += globalize.translate('RefreshDialogHelp');
     html += '</div>';
@@ -78,6 +83,7 @@ function onSubmit(e) {
     const mode = dlg.querySelector('#selectMetadataRefreshMode').value === 'scan' ? 'Default' : 'FullRefresh';
     const replaceAllImages = mode === 'FullRefresh' && dlg.querySelector('.chkReplaceImages').checked;
     const replaceTrickplayImages = mode === 'FullRefresh' && dlg.querySelector('.chkReplaceTrickplayImages').checked;
+    const replaceChapterImages = mode === 'FullRefresh' && dlg.querySelector('.chkReplaceChapterImages').checked;
 
     options.itemIds.forEach(function (itemId) {
         apiClient.refreshItem(itemId, {
@@ -86,6 +92,7 @@ function onSubmit(e) {
             MetadataRefreshMode: mode,
             ReplaceAllImages: replaceAllImages,
             RegenerateTrickplay: replaceTrickplayImages,
+            RegenerateChapterImages: replaceChapterImages,
             ReplaceAllMetadata: replaceAllMetadata
         });
     });
@@ -142,9 +149,11 @@ class RefreshDialog {
             if (this.value === 'scan') {
                 dlg.querySelector('.fldReplaceExistingImages').classList.add('hide');
                 dlg.querySelector('.fldReplaceTrickplayImages').classList.add('hide');
+                dlg.querySelector('.fldReplaceChapterImages').classList.add('hide');
             } else {
                 dlg.querySelector('.fldReplaceExistingImages').classList.remove('hide');
                 dlg.querySelector('.fldReplaceTrickplayImages').classList.remove('hide');
+                dlg.querySelector('.fldReplaceChapterImages').classList.remove('hide');
             }
         });
 
