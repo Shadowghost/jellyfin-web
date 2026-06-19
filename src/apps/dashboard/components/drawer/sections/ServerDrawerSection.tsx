@@ -30,7 +30,8 @@ const PLAYBACK_PATHS = [
     '/dashboard/playback/transcoding',
     '/dashboard/playback/resume',
     '/dashboard/playback/streaming',
-    '/dashboard/playback/trickplay'
+    '/dashboard/playback/trickplay',
+    '/dashboard/playback/stats'
 ];
 
 const ServerDrawerSection = () => {
@@ -131,6 +132,9 @@ const ServerDrawerSection = () => {
                     </ListItemLink>
                     <ListItemLink to='/dashboard/playback/resume' sx={{ pl: 4 }}>
                         <ListItemText inset primary={globalize.translate('ButtonResume')} />
+                    </ListItemLink>
+                    <ListItemLink to='/dashboard/playback/stats' sx={{ pl: 4 }}>
+                        <ListItemText inset primary={globalize.translate('HeaderPlaybackStatistics')} />
                     </ListItemLink>
                     <ListItemLink to='/dashboard/playback/streaming' sx={{ pl: 4 }}>
                         <ListItemText inset primary={globalize.translate('TabStreaming')} />
