@@ -307,7 +307,7 @@ function showIdentificationForm(page, item) {
             html += '</div>';
         }
 
-        page.querySelector('#txtLookupName').value = '';
+        page.querySelector('#txtLookupName').value = item.Name || '';
 
         if (item.Type === 'Person' || item.Type === 'BoxSet') {
             page.querySelector('.fldLookupYear').classList.add('hide');

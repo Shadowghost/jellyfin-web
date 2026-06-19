@@ -29,6 +29,9 @@ export const useSessions = (
         queryFn: ({ signal }) =>
             fetchSessions(api!, requestParams, { signal }),
         enabled: !!api,
-        refetchOnWindowFocus: false
+        refetchOnWindowFocus: false,
+        // Polling fallback so the list reflects stops/starts even if the Sessions WebSocket
+        // feed isn't delivering; the WebSocket still provides faster updates between polls.
+        refetchInterval: 5000
     });
 };
