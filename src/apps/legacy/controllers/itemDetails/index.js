@@ -1096,7 +1096,7 @@ function renderMoreFromSeason(view, item, apiClient) {
             cardBuilder.buildCards(result.Items, {
                 parentContainer: section,
                 itemsContainer: itemsContainer,
-                shape: 'autooverflow',
+                shape: 'overflowBackdrop',
                 sectionTitleTagName: 'h2',
                 scalable: true,
                 showTitle: true,
