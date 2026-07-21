@@ -52,7 +52,7 @@ const DeviceManagementMenu = ({ device, canDelete }: DeviceManagementMenuProps) 
 
     const onDeleteConfirm = useCallback(() => {
         if (device.Id) {
-            deleteDevice.mutate({ id: device.Id });
+            deleteDevice.mutate({ id: [ device.Id ] });
         }
         setIsDeleteOpen(false);
     }, [ device, deleteDevice ]);

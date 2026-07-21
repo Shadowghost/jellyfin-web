@@ -1,4 +1,3 @@
-import { getDisplayVersion } from '@jellyfin/sdk/lib/utils/versioning';
 import Paper from '@mui/material/Paper';
 import Typography from '@mui/material/Typography';
 import Stack from '@mui/material/Stack';
@@ -11,6 +10,7 @@ import React from 'react';
 
 import { useSystemInfo } from 'hooks/useSystemInfo';
 import globalize from 'lib/globalize';
+import { getDisplayVersion } from 'utils/versions';
 
 import Widget from './Widget';
 

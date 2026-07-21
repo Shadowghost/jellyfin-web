@@ -1,4 +1,4 @@
-import type { SessionInfo } from '@jellyfin/sdk/lib/generated-client/models/session-info';
+import type { SessionInfoDto } from '@jellyfin/sdk/lib/generated-client/models/session-info-dto';
 import { MediaStreamType } from '@jellyfin/sdk/lib/generated-client/models/media-stream-type';
 import type { PipelineInputs, SubtitleInput } from '../components/TranscodingPipelineGraph';
 import { protocolLabel } from './getSessionStreamInfo';
@@ -11,7 +11,7 @@ const containerFromPath = (path?: string | null): string | undefined => {
     return ext ? ext.toUpperCase() : undefined;
 };
 
-const mainContainer = (session: SessionInfo): string | undefined => (
+const mainContainer = (session: SessionInfoDto): string | undefined => (
     session.NowPlayingItem?.Container?.split(',')[0]?.toUpperCase() || undefined
 );
 
@@ -20,7 +20,7 @@ const mainContainer = (session: SessionInfo): string | undefined => (
  * for the transcoding pipeline graph. External audio/subtitle streams can originate from a
  * different container (e.g. an external .mka/.mks file), which is detected via the stream path.
  */
-const getSessionPipelineIo = (session: SessionInfo): { inputs: PipelineInputs, subtitleInput?: SubtitleInput, outputLabel?: string } => {
+const getSessionPipelineIo = (session: SessionInfoDto): { inputs: PipelineInputs, subtitleInput?: SubtitleInput, outputLabel?: string } => {
     const main = mainContainer(session);
     const mediaStreams = session.NowPlayingItem?.MediaStreams ?? [];
 
@@ -61,7 +61,7 @@ const getSessionPipelineIo = (session: SessionInfo): { inputs: PipelineInputs, s
 
 // The Output node shows the delivery protocol (e.g. "HLS (MP4)") when streamed via HLS/DASH,
 // otherwise just the output container.
-const outputLabel = (session: SessionInfo, main?: string): string | undefined => {
+const outputLabel = (session: SessionInfoDto, main?: string): string | undefined => {
     const container = session.TranscodingInfo?.Container?.toUpperCase();
     const protocol = protocolLabel(session.TranscodingInfo?.TranscodeProtocol);
     if (protocol) {

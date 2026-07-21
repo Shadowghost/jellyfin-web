@@ -1,5 +1,5 @@
 import type { DeviceInfoDto } from '@jellyfin/sdk/lib/generated-client/models/device-info-dto';
-import type { SessionInfo } from '@jellyfin/sdk/lib/generated-client/models/session-info';
+import type { SessionInfoDto } from '@jellyfin/sdk/lib/generated-client/models/session-info-dto';
 import Delete from '@mui/icons-material/Delete';
 import Box from '@mui/material/Box';
 import Button from '@mui/material/Button';
@@ -64,7 +64,7 @@ export const Component = () => {
     const devices = useMemo(() => data?.Items ?? [], [ data ]);
 
     const sessionByDevice = useMemo(() => {
-        const map = new Map<string, SessionInfo>();
+        const map = new Map<string, SessionInfoDto>();
         (liveSessions ?? []).forEach(session => {
             if (session.DeviceId && session.NowPlayingItem) {
                 map.set(session.DeviceId, session);

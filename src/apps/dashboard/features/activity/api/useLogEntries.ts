@@ -39,7 +39,7 @@ export const useLogEntries = (
  * sorting only; startIndex/limit are managed per page.
  */
 export const useInfiniteLogEntries = (
-    requestParams: ActivityLogApiGetLogEntriesRequest
+    requestParams: SystemApiGetLogEntriesRequest
 ) => {
     const { api } = useApi();
     return useInfiniteQuery({

@@ -1,4 +1,4 @@
-import type { SessionInfo } from '@jellyfin/sdk/lib/generated-client/models/session-info';
+import type { SessionInfoDto } from '@jellyfin/sdk/lib/generated-client/models/session-info-dto';
 import type { TranscodingInfo } from '@jellyfin/sdk/lib/generated-client/models/transcoding-info';
 import { useEffect, useMemo, useRef } from 'react';
 
@@ -7,7 +7,7 @@ import { useEffect, useMemo, useRef } from 'react';
  * The server briefly drops TranscodingInfo on pause, which would otherwise blank the stream rows
  * and pipeline graph; we re-inject the retained info as long as the same item is still loaded.
  */
-const useEffectiveSession = (session: SessionInfo): SessionInfo => {
+const useEffectiveSession = (session: SessionInfoDto): SessionInfoDto => {
     const retainedRef = useRef<{ itemId?: string, transcodingInfo: TranscodingInfo } | null>(null);
 
     useEffect(() => {

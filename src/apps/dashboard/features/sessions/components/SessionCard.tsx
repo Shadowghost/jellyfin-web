@@ -1,5 +1,5 @@
 import type { BaseItemDto } from '@jellyfin/sdk/lib/generated-client/models/base-item-dto';
-import type { SessionInfo } from '@jellyfin/sdk/lib/generated-client/models/session-info';
+import type { SessionInfoDto } from '@jellyfin/sdk/lib/generated-client/models/session-info-dto';
 import { PlaystateCommand } from '@jellyfin/sdk/lib/generated-client/models/playstate-command';
 import ArrowForward from '@mui/icons-material/ArrowForward';
 import ExpandMore from '@mui/icons-material/ExpandMore';
@@ -39,7 +39,7 @@ import SessionDetails from './SessionDetails';
 import SessionVolumeControl from './SessionVolumeControl';
 
 interface SessionCardProps {
-    session: SessionInfo;
+    session: SessionInfoDto;
     defaultExpanded?: boolean;
     /** Device identity header rendered at the top of the card. */
     header?: React.ReactNode;

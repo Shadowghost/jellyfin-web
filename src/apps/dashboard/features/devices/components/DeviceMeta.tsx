@@ -1,5 +1,5 @@
 import type { DeviceInfoDto } from '@jellyfin/sdk/lib/generated-client/models/device-info-dto';
-import type { SessionInfo } from '@jellyfin/sdk/lib/generated-client/models/session-info';
+import type { SessionInfoDto } from '@jellyfin/sdk/lib/generated-client/models/session-info-dto';
 import type { UserDto } from '@jellyfin/sdk/lib/generated-client/models/user-dto';
 import Avatar from '@mui/material/Avatar';
 import Stack from '@mui/material/Stack';
@@ -13,7 +13,7 @@ import { getLocaleWithSuffix } from 'utils/dateFnsLocale';
 
 interface DeviceMetaProps {
     device: DeviceInfoDto;
-    session?: SessionInfo;
+    session?: SessionInfoDto;
     user?: UserDto;
 }
 
@@ -26,11 +26,14 @@ const DeviceMeta = ({ device, session, user }: DeviceMetaProps) => {
 
     const userImage = useMemo(() => {
         if (session?.UserId && session.UserPrimaryImageTag && session.ServerId) {
-            return ServerConnections.getApiClient(session.ServerId).getUserImageUrl(session.UserId, {
-                tag: session.UserPrimaryImageTag,
-                type: 'Primary',
-                height: 48
-            });
+            const apiClient = ServerConnections.getApiClient(session.ServerId);
+            if (apiClient) {
+                return apiClient.getUserImageUrl(session.UserId, {
+                    tag: session.UserPrimaryImageTag,
+                    type: 'Primary',
+                    height: 48
+                });
+            }
         }
         if (user?.Id && user.PrimaryImageTag && window.ApiClient) {
             return window.ApiClient.getUserImageUrl(user.Id, {

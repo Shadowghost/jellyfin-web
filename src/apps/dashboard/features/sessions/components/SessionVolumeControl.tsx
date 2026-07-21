@@ -1,4 +1,4 @@
-import type { SessionInfo } from '@jellyfin/sdk/lib/generated-client/models/session-info';
+import type { SessionInfoDto } from '@jellyfin/sdk/lib/generated-client/models/session-info-dto';
 import { GeneralCommandType } from '@jellyfin/sdk/lib/generated-client/models/general-command-type';
 import VolumeOff from '@mui/icons-material/VolumeOff';
 import VolumeUp from '@mui/icons-material/VolumeUp';
@@ -11,7 +11,7 @@ import React, { useCallback, useEffect, useState } from 'react';
 import { useSendGeneralCommand } from '../api/useSendGeneralCommand';
 
 interface SessionVolumeControlProps {
-    session: SessionInfo;
+    session: SessionInfoDto;
     canControl: boolean;
 }
 

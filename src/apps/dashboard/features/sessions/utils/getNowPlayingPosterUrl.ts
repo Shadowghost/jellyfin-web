@@ -15,6 +15,9 @@ const getNowPlayingPosterUrl = (item: BaseItemDto): string | null => {
     }
 
     const apiClient = ServerConnections.getApiClient(item.ServerId);
+    if (!apiClient) {
+        return null;
+    }
     const tags = item.ImageTags ?? {};
 
     if (item.Id && tags.Primary) {

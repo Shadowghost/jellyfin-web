@@ -1,4 +1,4 @@
-import type { SessionInfo } from '@jellyfin/sdk/lib/generated-client/models/session-info';
+import type { SessionInfoDto } from '@jellyfin/sdk/lib/generated-client/models/session-info-dto';
 import { MediaStreamType } from '@jellyfin/sdk/lib/generated-client/models/media-stream-type';
 import Divider from '@mui/material/Divider';
 import Stack from '@mui/material/Stack';
@@ -13,7 +13,7 @@ import SessionStreamInfo from './SessionStreamInfo';
 import TranscodingPipelineGraph from './TranscodingPipelineGraph';
 
 interface SessionDetailsProps {
-    session: SessionInfo;
+    session: SessionInfoDto;
 }
 
 const InfoRow = ({ label, value }: { label: string, value: string }) => (
@@ -26,7 +26,7 @@ const InfoRow = ({ label, value }: { label: string, value: string }) => (
 // Selected stream tracks (video/audio/subtitle) by name, shown at the top of the expanded view with
 // a trailing separator before the transcoding info. The name is the track title, or failing that
 // its (fully-named) language — not the codec, which is shown in the transcoding info below.
-const SelectedTracks = ({ session }: { session: SessionInfo }) => {
+const SelectedTracks = ({ session }: { session: SessionInfoDto }) => {
     const languageName = useLanguageName();
     const playState = session.PlayState;
     const mediaStreams = session.NowPlayingItem?.MediaStreams ?? [];

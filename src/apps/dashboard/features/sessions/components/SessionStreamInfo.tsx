@@ -1,4 +1,4 @@
-import type { SessionInfo } from '@jellyfin/sdk/lib/generated-client/models/session-info';
+import type { SessionInfoDto } from '@jellyfin/sdk/lib/generated-client/models/session-info-dto';
 import ArrowForward from '@mui/icons-material/ArrowForward';
 import Chip from '@mui/material/Chip';
 import Stack from '@mui/material/Stack';
@@ -9,7 +9,7 @@ import globalize from 'lib/globalize';
 import getSessionStreamInfo from '../utils/getSessionStreamInfo';
 
 interface SessionStreamInfoProps {
-    session: SessionInfo;
+    session: SessionInfoDto;
 }
 
 const formatBytes = (bytes?: number | null): string | null => {

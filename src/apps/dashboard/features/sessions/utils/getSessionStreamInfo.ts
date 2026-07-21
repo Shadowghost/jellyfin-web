@@ -1,4 +1,4 @@
-import type { SessionInfo } from '@jellyfin/sdk/lib/generated-client/models/session-info';
+import type { SessionInfoDto } from '@jellyfin/sdk/lib/generated-client/models/session-info-dto';
 import type { MediaStream } from '@jellyfin/sdk/lib/generated-client/models/media-stream';
 import { MediaStreamType } from '@jellyfin/sdk/lib/generated-client/models/media-stream-type';
 import { VideoRangeType } from '@jellyfin/sdk/lib/generated-client/models/video-range-type';
@@ -245,7 +245,7 @@ const subtitleOutputLabel = (method?: string | null): string => {
 };
 
 interface SelectedStreams {
-    transcoding: SessionInfo['TranscodingInfo'];
+    transcoding: SessionInfoDto['TranscodingInfo'];
     videoStream?: MediaStream;
     audioStream?: MediaStream;
     subtitleStream?: MediaStream;
@@ -255,7 +255,7 @@ interface SelectedStreams {
 }
 
 /** Resolves the played video/audio/subtitle streams and per-stream direct flags for a session. */
-const selectStreams = (session: SessionInfo): SelectedStreams | null => {
+const selectStreams = (session: SessionInfoDto): SelectedStreams | null => {
     const nowPlaying = session.NowPlayingItem;
     if (!nowPlaying) {
         return null;
@@ -298,7 +298,7 @@ const selectStreams = (session: SessionInfo): SelectedStreams | null => {
  * Builds the detailed "source → output" rows (full codec descriptors with bitrates) shown in the
  * expanded session view above the transcoding pipeline graph.
  */
-const getSessionStreamInfo = (session: SessionInfo): StreamInfoRow[] => {
+const getSessionStreamInfo = (session: SessionInfoDto): StreamInfoRow[] => {
     const streams = selectStreams(session);
     if (!streams) {
         return [];
@@ -375,7 +375,7 @@ const getSessionStreamInfo = (session: SessionInfo): StreamInfoRow[] => {
  * Builds a simplified, codec-only "source → output" summary (no bitrates, resolution or HDR/Atmos
  * detail) for the at-a-glance panel on the collapsed session card.
  */
-export const getSessionStreamSummary = (session: SessionInfo): StreamInfoRow[] => {
+export const getSessionStreamSummary = (session: SessionInfoDto): StreamInfoRow[] => {
     const streams = selectStreams(session);
     if (!streams) {
         return [];

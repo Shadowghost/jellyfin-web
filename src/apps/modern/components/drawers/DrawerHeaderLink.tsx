@@ -1,4 +1,3 @@
-import { getDisplayVersion } from '@jellyfin/sdk/lib/utils/versioning';
 import Box from '@mui/material/Box';
 import ListItemIcon from '@mui/material/ListItemIcon';
 import ListItemText from '@mui/material/ListItemText';
@@ -6,6 +5,7 @@ import React from 'react';
 
 import { useSystemInfo } from 'hooks/useSystemInfo';
 import ListItemLink from 'components/ListItemLink';
+import { getDisplayVersion } from 'utils/versions';
 
 import appIcon from '@jellyfin/ux-web/icon-transparent.png';
 
