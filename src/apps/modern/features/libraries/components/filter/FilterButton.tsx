@@ -101,9 +101,12 @@ const FilterButton: FC<FilterButtonProps> = ({
     const open = Boolean(anchorEl);
     const id = open ? 'filter-popover' : undefined;
 
-    const { data: filtersLegacy } = useGetQueryFiltersLegacy(parentId, itemType);
-    const { data: filters } = useGetQueryFilters(parentId, itemType);
-    const { data: studios } = useGetStudios(parentId, itemType);
+    // Only fetch the filter option lists once the popover is opened. These queries (Filters, Filters2,
+    // Studios) are expensive on large libraries and their results are only used inside the popover, so
+    // fetching them eagerly on every library page load wastes a request the user usually never needs.
+    const { data: filtersLegacy } = useGetQueryFiltersLegacy(parentId, itemType, open);
+    const { data: filters } = useGetQueryFilters(parentId, itemType, open);
+    const { data: studios } = useGetStudios(parentId, itemType, open);
 
     const handleChange =
         (panel: string) =>

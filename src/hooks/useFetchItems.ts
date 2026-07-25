@@ -152,14 +152,14 @@ const fetchGetStudios = async (
     }
 };
 
-export const useGetStudios = (parentId: ParentId, itemType: BaseItemKind[]) => {
+export const useGetStudios = (parentId: ParentId, itemType: BaseItemKind[], isEnabled = true) => {
     const currentApi = useApi();
     const isLivetv = parentId === 'livetv';
     return useQuery({
         queryKey: ['Studios', parentId, itemType],
         queryFn: ({ signal }) =>
             fetchGetStudios(currentApi, parentId, itemType, { signal }),
-        enabled: !!currentApi.api && !!currentApi.user?.Id && !!parentId && !isLivetv
+        enabled: isEnabled && !!currentApi.api && !!currentApi.user?.Id && !!parentId && !isLivetv
     });
 };
 
@@ -209,7 +209,8 @@ const fetchGetQueryFilters = async (
 
 export const useGetQueryFiltersLegacy = (
     parentId: ParentId,
-    itemType: BaseItemKind[]
+    itemType: BaseItemKind[],
+    isEnabled = true
 ) => {
     const currentApi = useApi();
     const isLivetv = parentId === 'livetv';
@@ -219,13 +220,14 @@ export const useGetQueryFiltersLegacy = (
             fetchGetQueryFiltersLegacy(currentApi, parentId, itemType, {
                 signal
             }),
-        enabled: !!currentApi.api && !!currentApi.user?.Id && !!parentId && !isLivetv
+        enabled: isEnabled && !!currentApi.api && !!currentApi.user?.Id && !!parentId && !isLivetv
     });
 };
 
 export const useGetQueryFilters = (
     parentId: ParentId,
-    itemType: BaseItemKind[]
+    itemType: BaseItemKind[],
+    isEnabled = true
 ) => {
     const currentApi = useApi();
     const isLivetv = parentId === 'livetv';
@@ -235,7 +237,7 @@ export const useGetQueryFilters = (
             fetchGetQueryFilters(currentApi, parentId, itemType, {
                 signal
             }),
-        enabled: !!currentApi.api && !!currentApi.user?.Id && !!parentId && !isLivetv
+        enabled: isEnabled && !!currentApi.api && !!currentApi.user?.Id && !!parentId && !isLivetv
     });
 };
 
