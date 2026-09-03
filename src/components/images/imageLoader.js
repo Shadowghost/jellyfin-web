@@ -69,25 +69,15 @@ function itemBlurhashing(target, hash) {
     }
 }
 
-export function fillImage(entry) {
-    if (!entry) {
-        throw new Error('entry cannot be null');
-    }
-    const target = entry.target;
-    let source;
-
-    if (target) {
-        source = target.getAttribute('data-src');
-    } else {
-        source = entry;
+export function fillImage(elem) {
+    if (!elem) {
+        throw new Error('elem cannot be null');
     }
 
-    if (entry.isIntersecting) {
-        if (source) {
-            fillImageElement(target, source);
-        }
-    } else if (!source) {
-        emptyImageElement(target);
+    const source = elem.getAttribute('data-src');
+
+    if (source) {
+        fillImageElement(elem, source);
     }
 }
 
@@ -133,31 +123,6 @@ function fillImageElement(elem, url) {
             elem.classList.remove('lazy-hidden');
         });
     });
-}
-
-function emptyImageElement(elem) {
-    elem.removeEventListener('animationend', onAnimationEnd);
-    const canvas = elem.previousSibling;
-    if (canvas?.tagName === 'CANVAS') {
-        canvas.classList.remove('lazy-hidden');
-    }
-
-    // HACK: Unhide the content of the card padder
-    elem.parentNode?.querySelector('.cardPadder')?.classList.remove('lazy-hidden-children');
-
-    let url;
-
-    if (elem.tagName !== 'IMG') {
-        url = elem.style.backgroundImage.slice(4, -1).replace(/"/g, '');
-        elem.style.backgroundImage = 'none';
-    } else {
-        url = elem.getAttribute('src');
-        elem.setAttribute('src', '');
-    }
-    elem.setAttribute('data-src', url);
-
-    elem.classList.remove('lazy-image-fadein-fast', 'lazy-image-fadein');
-    elem.classList.add('lazy-hidden');
 }
 
 export function lazyChildren(elem) {
@@ -235,8 +200,7 @@ export function getPrimaryImageAspectRatio(items) {
 
 export function fillImages(elems) {
     for (let i = 0, length = elems.length; i < length; i++) {
-        const elem = elems[0];
-        fillImage(elem);
+        fillImage(elems[i]);
     }
 }
 

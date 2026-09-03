@@ -1,7 +1,7 @@
 import React, { type FC, useCallback, useState } from 'react';
 import { BlurhashCanvas } from 'react-blurhash';
-import { LazyLoadImage } from 'react-lazy-load-image-component';
 
+import useNearVisible from 'hooks/useNearVisible';
 import * as userSettings from '../../scripts/settings/userSettings';
 
 const imageStyle: React.CSSProperties = {
@@ -26,14 +26,10 @@ const Image: FC<ImageProps> = ({
     blurhash,
     containImage
 }) => {
+    const [imageRef, isNearVisible] = useNearVisible<HTMLImageElement>();
     const [isLoaded, setIsLoaded] = useState(false);
-    const [isLoadStarted, setIsLoadStarted] = useState(false);
     const handleLoad = useCallback(() => {
         setIsLoaded(true);
-    }, []);
-
-    const handleLoadStarted = useCallback(() => {
-        setIsLoadStarted(true);
     }, []);
 
     const fadeinDuration = userSettings.enableFastFadein() ? '0.1s' : '0.5s';
@@ -41,7 +37,7 @@ const Image: FC<ImageProps> = ({
 
     return (
         <div>
-            {!isLoaded && isLoadStarted && blurhash && userSettings.enableBlurhash() && (
+            {!isLoaded && isNearVisible && blurhash && userSettings.enableBlurhash() && (
                 <BlurhashCanvas
                     hash={blurhash}
                     width= {20}
@@ -54,9 +50,14 @@ const Image: FC<ImageProps> = ({
                     }}
                 />
             )}
-            <LazyLoadImage
+            {/* The element is always rendered so it has a box to observe; only
+                the source is deferred until it comes close to the visible area. */}
+            <img
+                ref={imageRef}
                 key={imgUrl}
-                src={imgUrl}
+                src={isNearVisible ? imgUrl : undefined}
+                alt=''
+                decoding='async'
                 style={{
                     ...imageStyle,
                     objectFit: containImage ? 'contain' : 'cover',
@@ -64,7 +65,6 @@ const Image: FC<ImageProps> = ({
                     transition: transitionDuration
                 }}
                 onLoad={handleLoad}
-                beforeLoad={handleLoadStarted}
             />
 
         </div>
