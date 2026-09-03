@@ -38,7 +38,7 @@ async function reload(page, item, focusContext) {
 
     // NOTE: We have to invalidate all queries for the user because images can show up in various places in the app and
     // we want them all to update when changed.
-    void queryClient.invalidateQueries(['User', apiClient.getCurrentUserId()]);
+    void queryClient.invalidateQueries({ queryKey: ['User', apiClient.getCurrentUserId()] });
 
     reloadItem(page, item, apiClient, focusContext);
 }
