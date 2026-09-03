@@ -24,6 +24,7 @@ import ConfirmDialog from 'components/ConfirmDialog';
 import { useRemoveVirtualFolder } from '../api/useRemoveVirtualFolder';
 import { getImageApi } from '@jellyfin/sdk/lib/utils/api/image-api';
 import { useApi } from 'hooks/useApi';
+import { useItem } from 'hooks/useItem';
 import { ImageType } from '@jellyfin/sdk/lib/generated-client/models/image-type';
 import dom from 'utils/dom';
 import { invalidateVirtualFolders } from '../api/invalidateVirtualFolders';
@@ -42,15 +43,21 @@ const LibraryCard = ({ virtualFolder }: LibraryCardProps) => {
     const renameVirtualFolder = useRenameVirtualFolder();
     const removeVirtualFolder = useRemoveVirtualFolder();
 
+    // The library info carries no image tag, so it is taken from the item itself.
+    // Without a tag the image URL never changes, and the browser keeps serving the
+    // previous image from its cache after the library image is changed.
+    const { data: item, isPending: isItemPending } = useItem(virtualFolder.ItemId ?? undefined);
+
     const imageUrl = useMemo(() => {
-        if (virtualFolder.PrimaryImageItemId && virtualFolder.ItemId && api) {
+        if (virtualFolder.PrimaryImageItemId && virtualFolder.ItemId && api && !isItemPending) {
             const dpr = window?.devicePixelRatio || 1;
             return getImageApi(api)
                 .getItemImageUrlById(virtualFolder.ItemId, ImageType.Primary, {
-                    maxWidth: Math.round(dom.getScreenWidth() * dpr * 0.40)
+                    maxWidth: Math.round(dom.getScreenWidth() * dpr * 0.40),
+                    tag: item?.ImageTags?.Primary
                 });
         }
-    }, [ api, virtualFolder ]);
+    }, [ api, item, isItemPending, virtualFolder ]);
 
     const typeName = getCollectionTypeOptions().filter(function (t) {
         return t.value == virtualFolder.CollectionType;
@@ -123,7 +130,7 @@ const LibraryCard = ({ virtualFolder }: LibraryCardProps) => {
             itemId: virtualFolder.ItemId,
             serverId: ServerConnections.currentApiClient()?.serverId()
         }).then(() => {
-            invalidateVirtualFolders(user);
+            invalidateVirtualFolders(user, virtualFolder);
         }).catch(() => {
             /* pop up closed */
         });
