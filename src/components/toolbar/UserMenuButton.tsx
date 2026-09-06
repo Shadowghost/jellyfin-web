@@ -34,7 +34,7 @@ const UserMenuButton = () => {
                     color='inherit'
                     sx={{ padding: 0 }}
                 >
-                    <UserAvatar user={user} />
+                    <UserAvatar user={user} size={32} />
                 </IconButton>
             </Tooltip>
 

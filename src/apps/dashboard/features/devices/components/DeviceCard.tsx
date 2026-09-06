@@ -1,4 +1,5 @@
 import React, { useCallback, useMemo, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import type { SessionInfoDto } from '@jellyfin/sdk/lib/generated-client/models/session-info-dto';
 import Typography from '@mui/material/Typography';
 import Card from '@mui/material/Card';
@@ -14,6 +15,7 @@ import PlayArrow from '@mui/icons-material/PlayArrow';
 import Pause from '@mui/icons-material/Pause';
 import Stop from '@mui/icons-material/Stop';
 import Info from '@mui/icons-material/Info';
+import Launch from '@mui/icons-material/Launch';
 import LinearProgress from '@mui/material/LinearProgress';
 import CardActions from '@mui/material/CardActions';
 import IconButton from '@mui/material/IconButton';
@@ -37,6 +39,13 @@ const DeviceCard = ({ device }: DeviceCardProps) => {
     const [ isMessageDialogOpen, setIsMessageDialogOpen ] = useState(false);
     const sendMessage = useSendMessage();
     const playStateCommand = useSendPlayStateCommand();
+    const navigate = useNavigate();
+
+    const onShowSessionDetails = useCallback(() => {
+        if (device.DeviceId) {
+            navigate(`/dashboard/devices?expanded=${device.DeviceId}`);
+        }
+    }, [ device, navigate ]);
 
     const onPlayPauseSession = useCallback(() => {
         if (device.Id) {
@@ -233,6 +242,14 @@ const DeviceCard = ({ device }: DeviceCardProps) => {
                     {isPlayingMedia && (
                         <IconButton onClick={showPlaybackInfo}>
                             <Info />
+                        </IconButton>
+                    )}
+                    {isPlayingMedia && (
+                        <IconButton
+                            title={globalize.translate('HeaderSession')}
+                            onClick={onShowSessionDetails}
+                        >
+                            <Launch />
                         </IconButton>
                     )}
                     {canControl && (
