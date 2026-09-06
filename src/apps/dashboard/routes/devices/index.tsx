@@ -33,6 +33,9 @@ import globalize from 'lib/globalize';
 const INITIAL_VISIBLE = 12;
 const LOAD_MORE = 12;
 
+// Remembers the "Now Playing" filter so it survives leaving and returning to the page.
+const PLAYING_ONLY_KEY = 'devices.playingOnly';
+
 // Horizontal gutter matching the app bar toolbar (16px mobile / 24px desktop), so page content
 // lines up with the header elements above it.
 const GUTTER = { xs: 2, sm: 3 };
@@ -54,12 +57,15 @@ export const Component = () => {
     const [ visibleCount, setVisibleCount ] = useState(INITIAL_VISIBLE);
     const [ search, setSearch ] = useState('');
     const [ userFilter, setUserFilter ] = useState(searchParams.get('user') ?? '');
-    const [ playingOnly, setPlayingOnly ] = useState(false);
+    const [ playingOnly, setPlayingOnly ] = useState(() => localStorage.getItem(PLAYING_ONLY_KEY) === 'true');
     const deleteDevice = useDeleteDevice();
 
     const onSearchChange = useCallback((e: React.ChangeEvent<HTMLInputElement>) => setSearch(e.target.value), []);
     const onUserChange = useCallback((e: SelectChangeEvent) => setUserFilter(e.target.value), []);
-    const onPlayingChange = useCallback((e: React.ChangeEvent<HTMLInputElement>) => setPlayingOnly(e.target.checked), []);
+    const onPlayingChange = useCallback((e: React.ChangeEvent<HTMLInputElement>) => {
+        setPlayingOnly(e.target.checked);
+        localStorage.setItem(PLAYING_ONLY_KEY, String(e.target.checked));
+    }, []);
 
     const devices = useMemo(() => data?.Items ?? [], [ data ]);
 
