@@ -6,6 +6,7 @@ import Palette from '@mui/icons-material/Palette';
 import People from '@mui/icons-material/People';
 import PlayCircle from '@mui/icons-material/PlayCircle';
 import Settings from '@mui/icons-material/Settings';
+import Slideshow from '@mui/icons-material/Slideshow';
 import Collapse from '@mui/material/Collapse';
 import List from '@mui/material/List';
 import ListItem from '@mui/material/ListItem';
@@ -81,6 +82,12 @@ const ServerDrawerSection = () => {
                     <Palette />
                 </ListItemIcon>
                 <ListItemText primary={globalize.translate('HeaderBranding')} />
+            </ListItemLink>
+            <ListItemLink to='/dashboard/hero'>
+                <ListItemIcon>
+                    <Slideshow />
+                </ListItemIcon>
+                <ListItemText primary={globalize.translate('HeaderHero')} />
             </ListItemLink>
             <ListItem disablePadding>
                 <ListItemLink to='/dashboard/users'>

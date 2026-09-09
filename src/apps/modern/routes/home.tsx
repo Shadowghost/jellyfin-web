@@ -175,6 +175,7 @@ const Home = () => {
                 ]}
             >
                 <div className='tabContent pageTabContent' id='homeTab' data-index='0'>
+                    <div className='heroSection'></div>
                     <div className='sections'></div>
                 </div>
                 <div className='tabContent pageTabContent' id='favoritesTab' data-index='1'>

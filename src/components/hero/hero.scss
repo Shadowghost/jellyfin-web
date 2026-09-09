@@ -1,0 +1,311 @@
+$hero-overlap: 6em;
+$hero-height: min(43.75vw, 70vh);
+$hero-height-narrow: 125vw;
+$hero-fade: linear-gradient(to bottom, #000 0%, #000 55%, transparent 100%);
+
+.heroSection {
+    position: relative;
+    width: 100vw;
+    margin-left: calc(50% - 50vw);
+    margin-right: calc(50% - 50vw);
+    overflow-x: clip;
+
+    // The hero runs to the top edge underneath the app bar.
+    margin-top: -48px;
+
+    // The next row rides up over the bottom of the hero, which fades out under it.
+    margin-bottom: -#{$hero-overlap};
+}
+
+.heroSection ~ .sections {
+    position: relative;
+    z-index: 1;
+
+    // The hero snaps this row to the top of the screen; without the margin it would land
+    // underneath the app bar it scrolls beneath.
+    scroll-margin-top: 48px;
+}
+
+.heroSection:empty {
+    display: none;
+}
+
+// Placeholder while the hero is still loading: same height as the real thing, so the rows below
+// sit where they will stay. Declared after the :empty rule, which it has to win against.
+.heroSection.heroSectionPending:empty {
+    display: block;
+    height: $hero-height;
+
+    @media all and (max-width: 50em) {
+        height: $hero-height-narrow;
+    }
+}
+
+.hero {
+    position: relative;
+    overflow: hidden;
+    outline: none;
+
+    // Horizontal gestures are the hero's; vertical ones stay the page's to scroll.
+    touch-action: pan-y;
+    user-select: none;
+
+    // A definite height rather than aspect-ratio plus max-height.
+    height: $hero-height;
+
+    @media all and (max-width: 50em) {
+        // 4/5 portrait, so 100vw of width is 125vw of height.
+        height: $hero-height-narrow;
+    }
+}
+
+.heroSlides {
+    position: absolute;
+    inset: 0;
+}
+
+// Only while a drag is actually in progress, so the hero does not claim to be draggable when a
+// click is all that is wanted.
+.heroDragging {
+    cursor: grabbing;
+}
+
+.heroNav {
+    position: absolute;
+    top: 50%;
+    z-index: 1;
+    // Shown only for a fine pointer: a swipe covers touch, and on a remote the arrow keys do.
+    display: none;
+    align-items: center;
+    justify-content: center;
+    width: 2.6em;
+    height: 2.6em;
+    padding: 0;
+    transform: translateY(-50%);
+    border: none;
+    border-radius: 50%;
+    color: #fff;
+    background: rgba(0, 0, 0, 0.45);
+    cursor: pointer;
+    opacity: 0;
+    transition: opacity 0.2s ease-in-out, background 0.2s ease-in-out;
+
+    &:hover,
+    &:focus-visible {
+        background: rgba(0, 0, 0, 0.7);
+    }
+}
+
+.heroNavPrev {
+    left: 1em;
+}
+
+.heroNavNext {
+    right: 1em;
+}
+
+@media (hover: hover) and (pointer: fine) {
+    .heroNav {
+        display: flex;
+    }
+
+    // Kept out of the way until the hero is actually being looked at.
+    .hero:hover .heroNav,
+    .hero:focus-within .heroNav {
+        opacity: 1;
+    }
+}
+
+.heroSlide {
+    position: absolute;
+    inset: 0;
+    opacity: 0;
+    visibility: hidden;
+    transition: opacity 0.5s ease-in-out, visibility 0.5s ease-in-out;
+}
+
+.heroSlideActive {
+    opacity: 1;
+    visibility: visible;
+}
+
+.heroSlideBackdrop {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: center 20%;
+    mask-image: $hero-fade;
+}
+
+.heroSlideScrim {
+    position: absolute;
+    inset: 0;
+    background:
+        linear-gradient(to top, rgba(0, 0, 0, 0.9) 0%, rgba(0, 0, 0, 0) 60%),
+        linear-gradient(to right, rgba(0, 0, 0, 0.75) 0%, rgba(0, 0, 0, 0) 65%);
+
+    // Fades with the image, or the scrim would leave a dark band where the image has gone.
+    mask-image: $hero-fade;
+}
+
+.heroSlideContent {
+    position: absolute;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    padding: 1.5em 3.3% calc(#{$hero-overlap} + 2.5em);
+    max-width: 46em;
+    color: #fff;
+    text-shadow: 0 1px 3px rgba(0, 0, 0, 0.6);
+
+    @media all and (max-width: 50em) {
+        padding: 1em 1em calc(#{$hero-overlap} + 2.5em);
+        max-width: none;
+        text-align: center;
+    }
+}
+
+.heroSlideLogoContainer {
+    margin-bottom: 0.6em;
+}
+
+.heroSlideLogo {
+    max-height: 6em;
+    max-width: min(100%, 22em);
+    object-fit: contain;
+
+    @media all and (max-width: 50em) {
+        max-height: 4.5em;
+    }
+}
+
+.heroSlideTitle {
+    margin: 0 0 0.4em;
+    font-size: 2.2em;
+    font-weight: 500;
+
+    @media all and (max-width: 50em) {
+        font-size: 1.6em;
+    }
+}
+
+.heroSlideInfo {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 0.25em 1em;
+    margin-bottom: 0.6em;
+    opacity: 0.9;
+
+    @media all and (max-width: 50em) {
+        justify-content: center;
+    }
+}
+
+.heroSlideOverview {
+    margin: 0 0 0.6em;
+    // Long overviews are clamped rather than pushed off the slide; the details page has the rest.
+    display: -webkit-box;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 3;
+    overflow: hidden;
+    line-height: 1.4;
+    opacity: 0.92;
+}
+
+.heroSlideGenres {
+    margin-bottom: 1em;
+    font-size: 0.92em;
+    opacity: 0.75;
+}
+
+.heroSlideActions {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 0.6em;
+
+    @media all and (max-width: 50em) {
+        justify-content: center;
+    }
+}
+
+.heroButton {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4em;
+    padding: 0.6em 1.2em;
+    border: none;
+    border-radius: 0.25em;
+    font-family: inherit;
+    font-size: 1em;
+    color: inherit;
+    background: rgba(255, 255, 255, 0.16);
+    cursor: pointer;
+
+    &:hover,
+    &:focus-visible {
+        background: rgba(255, 255, 255, 0.28);
+    }
+}
+
+.heroButtonPlay {
+    color: #000;
+    background: #fff;
+
+    &:hover,
+    &:focus-visible {
+        background: rgba(255, 255, 255, 0.85);
+    }
+}
+
+.heroButtonFavorite {
+    padding: 0.6em;
+    border-radius: 50%;
+}
+
+.heroButtonFavoriteOn .material-icons {
+    color: #c33;
+}
+
+.heroDots {
+    position: absolute;
+    right: 3.3%;
+    bottom: calc(#{$hero-overlap} + 1em);
+    display: flex;
+    gap: 0.5em;
+
+    @media all and (max-width: 50em) {
+        left: 0;
+        right: 0;
+        justify-content: center;
+    }
+}
+
+.heroDot {
+    width: 0.6em;
+    height: 0.6em;
+    padding: 0;
+    border: none;
+    border-radius: 50%;
+    background: rgba(255, 255, 255, 0.4);
+    cursor: pointer;
+    transition: background 0.2s ease-in-out;
+
+    &:hover,
+    &:focus-visible {
+        background: rgba(255, 255, 255, 0.7);
+    }
+}
+
+.heroDotActive {
+    background: #fff;
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .heroSlide {
+        transition: none;
+    }
+}

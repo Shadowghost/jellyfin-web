@@ -415,6 +415,7 @@ function renderPerLibrarySettings(context, user, userViews, userSettings) {
 
 function loadForm(context, user, userSettings, apiClient) {
     context.querySelector('.chkHidePlayedFromLatest').checked = user.Configuration.HidePlayedInLatest || false;
+    context.querySelector('.chkEnableHero').checked = userSettings.enableHero();
 
     updateHomeSectionValues(context, userSettings);
 
@@ -482,6 +483,8 @@ function getCheckboxItems(selector, context, isChecked) {
 
 async function saveUser(context, user, userSettingsInstance, apiClient) {
     user.Configuration.HidePlayedInLatest = context.querySelector('.chkHidePlayedFromLatest').checked;
+
+    userSettingsInstance.enableHero(context.querySelector('.chkEnableHero').checked);
 
     user.Configuration.LatestItemsExcludes = getCheckboxItems('.chkIncludeInLatest', context, false).map(i => {
         return i.getAttribute('data-folderid');

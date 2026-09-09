@@ -1,10 +1,11 @@
 export const SEARCH_SECTIONS_SORT_ORDER = [
+    'Collections',
+    'Playlists',
     'Movies',
     'Shows',
     'Episodes',
     'People',
     'Studios',
-    'Playlists',
     'Artists',
     'Albums',
     'Songs',
@@ -14,6 +15,5 @@ export const SEARCH_SECTIONS_SORT_ORDER = [
     'HeaderPhotoAlbums',
     'Photos',
     'HeaderAudioBooks',
-    'Books',
-    'Collections'
+    'Books'
 ];

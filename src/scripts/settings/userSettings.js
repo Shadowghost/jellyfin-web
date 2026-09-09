@@ -250,6 +250,19 @@ export class UserSettings {
     }
 
     /**
+     * Get or set whether the hero section is shown at the top of the home screen.
+     * @param {boolean|undefined} [val] - Whether the hero section is shown.
+     * @return {boolean} Whether the hero section is shown.
+     */
+    enableHero(val) {
+        if (val !== undefined) {
+            return this.set('enableHero', val.toString());
+        }
+
+        return toBoolean(this.get('enableHero'), true);
+    }
+
+    /**
      * Get or set 'Theme Songs' state.
      * @param {boolean|undefined} [val] - Flag to enable 'Theme Songs' or undefined.
      * @return {boolean} 'Theme Songs' state.
@@ -732,6 +745,7 @@ export const enableCinemaMode = currentSettings.enableCinemaMode.bind(currentSet
 export const selectAudioNormalization = currentSettings.selectAudioNormalization.bind(currentSettings);
 export const enableNextVideoInfoOverlay = currentSettings.enableNextVideoInfoOverlay.bind(currentSettings);
 export const enableVideoRemainingTime = currentSettings.enableVideoRemainingTime.bind(currentSettings);
+export const enableHero = currentSettings.enableHero.bind(currentSettings);
 export const enableThemeSongs = currentSettings.enableThemeSongs.bind(currentSettings);
 export const enableThemeVideos = currentSettings.enableThemeVideos.bind(currentSettings);
 export const enableFastFadein = currentSettings.enableFastFadein.bind(currentSettings);
